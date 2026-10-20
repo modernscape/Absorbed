@@ -13,19 +13,19 @@ struct MenuView: View {
     
     @Environment(\.modelContext) var modelContext
     
-//    @Query (
-//        sort: [
-//            SortDescriptor(\Category.index, order: .forward)
-//        ]
-//    ) var categories: [Category]
-//    
+    @Query (
+        sort: [
+            SortDescriptor(\Category.index, order: .forward)
+        ]
+    ) var categories: [Category]
+    
 //    @Query private var items: [Item]
     
     //    @EnvironmentObject var categoryData : CategoryData
     
     @EnvironmentObject var setData : ShareData
     
-    @State var itemsForCategory : ItemsForCategory
+//    @State var itemsForCategory : ItemsForCategory
     
     @State var showSheet = false
     
@@ -37,32 +37,52 @@ struct MenuView: View {
     
     var forItem : Bool = false
     
-    private func deleteCategory(_ item: Category) {
+    private func deleteCategory(_ cat: Category) {
         withAnimation {
-            modelContext.delete(item)
+            for item in cat.items {
+                modelContext.delete(item)
+            }
+            modelContext.delete(cat)
             try! modelContext.save()
+            updateAllItemCatIndex(ary: categories)
+            alignViews(categories: categories)
+            setData.resetSelection()
         }
     }
+    
+
     
     private func deleteItem(_ item: Item) {
         withAnimation {
             modelContext.delete(item)
             try! modelContext.save()
+//            alignViews(categories: categories)
+            setData.resetSelection()
+            
         }
     }
     
-    func deleteFromItemsForCategory() {
-        withAnimation {
-            if setData.selectedItemView != nil {
-                let item = setData.selectedItemView.item
-                if let index = itemsForCategory.data[item.catIndex].firstIndex(of: item) {
-                    itemsForCategory.data[item.catIndex].remove(at: index)
-                }
-            }
+    private func deleteItemOfCategory(_ cat: Category, item: Item) {
+        if let index = cat.items.firstIndex(of: item) {
+            cat.items.remove(at: index)
         }
-       
     }
     
+    
+    
+    
+//    func deleteFromItemsForCategory() {
+//        withAnimation {
+//            if setData.selectedItemView != nil {
+//                let item = setData.selectedItemView.item
+//                if let index = itemsForCategory.data[item.catIndex].firstIndex(of: item) {
+//                    itemsForCategory.data[item.catIndex].remove(at: index)
+//                }
+//            }
+//        }
+//       
+//    }
+//    
     
     func duplicateItem() {
         
@@ -87,8 +107,6 @@ struct MenuView: View {
             
         }
 
-        
-        
     }
     
     
@@ -108,20 +126,40 @@ struct MenuView: View {
     
     
     
-    func sliderChanged() {
-//        print("Slider value changed to \(setData.selectedItemView.item.length)")
-//        print("Slider value changed to \(setData.selectedCatView.category.length)")
-    }
+//    func sliderChanged() {
+////        print("Slider value changed to \(setData.selectedItemView.item.length)")
+////        print("Slider value changed to \(setData.selectedCatView.category.length)")
+//    }
     
+    @State var sliderChanging = false
+    @State var cancelAlign = false
+    
+    let alignInterval = 0.6
+    
+    @State var timer : Timer!
+    @State var time : TimeInterval!
+    
+    func startTimer() {
+        timer?.invalidate()
+        time = 0
+        
+//        var count = 0
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { timer in
+            time += 0.2
+//            print(count)
+        }
+        
+//        print(time)
+//        return time
+    }
     
     
     var body: some View {
         
         
         VStack {
-            
       
-            
             if setData.selectedItemView != nil  {
                 Slider(value: Binding(get: {
                     
@@ -133,15 +171,24 @@ struct MenuView: View {
                     }
                 }, set: { (newVal) in
                     
-                    //                    if selectedItemView != nil {
-                    
-                    
+          
+
                     if setData.selectedItemView != nil {
                         setData.selectedItemView.item.length = newVal
-                        //                    }
                     }
                     
-                    self.sliderChanged()
+                    startTimer()
+                
+                    let delay = alignInterval
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+  
+                        if time >= alignInterval-0.2 {
+                            alignViews(categories: categories)
+                            setData.resetSelection()
+                            
+                  
+                        }
+                    }
                     
                 }), in: 40...150)
                 .padding(.all)
@@ -152,27 +199,31 @@ struct MenuView: View {
             if setData.selectedCatView != nil {
                 Slider(value: Binding(get: {
                     
-                    //                    if selectedCatView != nil {
-                    
                     if setData.selectedCatView != nil {
                         setData.selectedCatView.category.length
                         
                     } else {
                         150
                     }
-                    
-                    
+
                 }, set: { (newVal) in
-                    
-                    //                    if selectedCatView != nil {
                     
                     if setData.selectedCatView != nil {
                         setData.selectedCatView.category.length = newVal
                     }
-                    //                    }
                     
+                    startTimer()
                     
-                    self.sliderChanged()
+                    let delay = alignInterval
+                    DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+       
+                        if time >= alignInterval-0.2 {
+                            alignViews(categories: categories)
+                            setData.resetSelection()
+               
+                        }
+                    }
+
                 }), in: 200...350)
                 .padding(.all)
                 .tint(.red)
@@ -188,7 +239,7 @@ struct MenuView: View {
                     .sheet(isPresented: $showSheet) {
                         if setData.selectedCatView != nil {
                             
-                            CategoryDetailScreen(itemsForCategory: itemsForCategory, category: setData.selectedCatView.category)
+                            CategoryDetailScreen(category: setData.selectedCatView.category)
 //                                                    CategoryDetailScreen(itemsForCategory: itemsForCategory, category: selectedCatView.category)
                         } else {
                             ItemDetailScreen(item: setData.selectedItemView.item)
@@ -199,20 +250,20 @@ struct MenuView: View {
                     .onTapGesture {
                         if setData.selectedCatView != nil {
                             deleteCategory(setData.selectedCatView.category)
-                            //                        selectedCatView.deleteCategory()
+                    
                         } else {
                   
-                            //                        setData.setData.selectedCatView.deleteItem()
-//                            setData.selectedItemView.dismiss()
-                            
-                   
+
+                            deleteItemOfCategory(categories[setData.selectedItemView.item.catIndex], item: setData.selectedItemView.item)
                 
-                                deleteFromItemsForCategory()
+//                                deleteFromItemsForCategory()
                                 deleteItem(setData.selectedItemView.item)
                                 
                             withAnimation {
-                                setData.selectedItemView.isSelected = false
-                                setData.selectedItemView = nil
+//                                setData.resetSelection()
+//                                setData.selectedItemView.isSelected = false
+//                                setData.selectedItemView = nil
+                       
                             }
                             
                         
@@ -228,6 +279,7 @@ struct MenuView: View {
                             showStepScreen = true
                             
                         }
+                    
                         .sheet(isPresented: $showStepScreen) {
                             StepsScreen(forAddItem: true)
                             

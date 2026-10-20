@@ -36,13 +36,13 @@ let laurel_right = "laurel.trailing"
 
 struct IntentionScreen: View {
     
-    @Environment(\.modelContext) var modelContext
-    @Query var wants_new: [Want]
+//    @Environment(\.modelContext) var modelContext
+//    @Query var wants_new: [Want]
     
     
 //    @ObservedObject var wants = Wants() // old
         
-    @FocusState private var isFocused: Bool
+//    @FocusState private var isFocused: Bool
     @State private var showSheet = false
     @State private var text = ""
     
@@ -52,66 +52,66 @@ struct IntentionScreen: View {
     @AppStorage(KeyString.icon_3.rawValue) var icon_3 : Int = 0
     @AppStorage(KeyString.icon_4.rawValue) var icon_4 : Int = 0
     
-    func addWant() {
-        let item =  Want(title: "お金持ちになる", isWant: true)
-        modelContext.insert(item)
+    init() {
+        UITextField.appearance().clearButtonMode = .whileEditing
     }
     
-    func makeDefaultWants() {
-        
-        let ary = [
-            Want(title: "お金持ちになる", isWant: true),
-            Want(title: "高い月収", isWant: true),
-            Want(title: "モノを持たない", isWant: true),
-            Want(title: "パートナー", isWant: true),
-            Want(title: "扱う金額の桁を変える", isWant: true),
-            Want(title: "環境の良いところに住む", isWant: true),
-            Want(title: "自分も嬉しい他者も嬉しい", isWant: true),
-            
-            Want(title: "お金に不自由な生活", isWant: false),
-            Want(title: "能力がない", isWant: false),
-            Want(title: "ストレスの多い仕事", isWant: false),
-            Want(title: "単価の安い仕事", isWant: false),
-            Want(title: "不安の多い仕事", isWant: false),
-            Want(title: "ムダな時間があること", isWant: false),
-            Want(title: "要らないモノを持っている", isWant: false),
-            Want(title: "満員電車", isWant: false)
-        
-        ]
-        
-        for i in 0..<ary.count {
-            let item = ary[i]
-            modelContext.insert(item)
-        }
-        
-    }
+
+//    func makeDefaultWants() {
+//        
+//        let ary = [
+//            Want(title: "お金持ちになる", isWant: true),
+//            Want(title: "高い月収", isWant: true),
+//            Want(title: "モノを持たない", isWant: true),
+//            Want(title: "パートナー", isWant: true),
+//            Want(title: "扱う金額の桁を変える", isWant: true),
+//            Want(title: "環境の良いところに住む", isWant: true),
+//            Want(title: "自分も嬉しい他者も嬉しい", isWant: true),
+//            
+//            Want(title: "お金に不自由な生活", isWant: false),
+//            Want(title: "能力がない", isWant: false),
+//            Want(title: "ストレスの多い仕事", isWant: false),
+//            Want(title: "単価の安い仕事", isWant: false),
+//            Want(title: "不安の多い仕事", isWant: false),
+//            Want(title: "ムダな時間があること", isWant: false),
+//            Want(title: "要らないモノを持っている", isWant: false),
+//            Want(title: "満員電車", isWant: false)
+//        
+//        ]
+//        
+//        for i in 0..<ary.count {
+//            let item = ary[i]
+//            modelContext.insert(item)
+//        }
+//        
+//    }
     
     
-    func makeDefaultKewords() {
-        
-        let ary = [
-            Keyword(title: "貢献", isWant: true),
-            Keyword(title: "シンプルな生き方", isWant: true),
-            Keyword(title: "環境", isWant: true),
-            Keyword(title: "パートナー", isWant: true),
-            Keyword(title: "お金", isWant: true),
-            Keyword(title: "クリエイティブ", isWant: true),
-            Keyword(title: "心身の健康", isWant: true),
-            Keyword(title: "時間", isWant: true),
-            Keyword(title: "単価が高い", isWant: true),
-            
-            Keyword(title: "ストレス", isWant: false),
-            Keyword(title: "低所得", isWant: false),
-            Keyword(title: "不安", isWant: false),
-            Keyword(title: "能力がない", isWant: false),
-            Keyword(title: "単価が低い", isWant: false)
-        ]
-        
-        for i in 0..<ary.count {
-            let item = ary[i]
-            modelContext.insert(item)
-        }
-    }
+//    func makeDefaultKewords() {
+//        
+//        let ary = [
+//            Keyword(title: "貢献", isWant: true),
+//            Keyword(title: "シンプルな生き方", isWant: true),
+//            Keyword(title: "環境", isWant: true),
+//            Keyword(title: "パートナー", isWant: true),
+//            Keyword(title: "お金", isWant: true),
+//            Keyword(title: "クリエイティブ", isWant: true),
+//            Keyword(title: "心身の健康", isWant: true),
+//            Keyword(title: "時間", isWant: true),
+//            Keyword(title: "単価が高い", isWant: true),
+//            
+//            Keyword(title: "ストレス", isWant: false),
+//            Keyword(title: "低所得", isWant: false),
+//            Keyword(title: "不安", isWant: false),
+//            Keyword(title: "能力がない", isWant: false),
+//            Keyword(title: "単価が低い", isWant: false)
+//        ]
+//        
+//        for i in 0..<ary.count {
+//            let item = ary[i]
+//            modelContext.insert(item)
+//        }
+//    }
 
     var body: some View {
         
@@ -151,14 +151,17 @@ struct IntentionScreen: View {
             
         }
         .onAppear {
-            if _ud.object(forKey: KeyString.wantsMaken.rawValue) == nil {
-                makeDefaultWants()
-                _ud.setValue("Done", forKey: KeyString.wantsMaken.rawValue)
-            }
-            if _ud.object(forKey: KeyString.kewordsMaken.rawValue) == nil {
-                makeDefaultKewords()
-                _ud.setValue("Done", forKey: KeyString.kewordsMaken.rawValue)
-            }
+            
+
+            
+//            if _ud.object(forKey: KeyString.wantsMaken.rawValue) == nil {
+//                makeDefaultWants()
+//                _ud.setValue("Done", forKey: KeyString.wantsMaken.rawValue)
+//            }
+//            if _ud.object(forKey: KeyString.kewordsMaken.rawValue) == nil {
+//                makeDefaultKewords()
+//                _ud.setValue("Done", forKey: KeyString.kewordsMaken.rawValue)
+//            }
         }
     }
 }
@@ -179,19 +182,17 @@ class Want : Identifiable, Equatable {
     var id = UUID()
     var title : String
     var isWant : Bool
+    var index : Int
     
-    init(id: UUID = UUID(), title: String, isWant: Bool) {
+    init(id: UUID = UUID(), title: String, isWant: Bool, index: Int) {
         self.id = id
         self.title = title
         self.isWant = isWant
+        self.index = index
     }
     
-//    init(id: UUID = UUID(), title: String, isWant: Bool) {
-//        self.id = id
-//        self.title = title
-//        self.isWant = isWant
-//    }
-        
+    
+
 }
 
 
@@ -226,9 +227,19 @@ func WantRow(_ want: Want, isWant: Bool) -> some View {
 
 struct HalfView : View {
     
-    @Environment(\.modelContext) var modelContext
-    @Query var wants_new: [Want]
-    @Query var keywords_new: [Keyword]
+    @Environment(\.modelContext) private var modelContext
+//    @Query var wants: [Want]
+    @Query var keywords: [Keyword]
+    
+    @Query (
+        sort: [
+            SortDescriptor(\Want.index, order: .forward)
+//            SortDescriptor(\Step.date, order: .forward)
+        ]
+    ) var wants: [Want]
+    
+    @State var wantAry : [Want] = []
+    
     
 //    struct HalfView(_ title: String, imageName: String, wants: Wants , isWant: Bool) : View {
     
@@ -238,44 +249,167 @@ struct HalfView : View {
     var isWant : Bool
     
     func filteredWants(_ isWant: Bool) -> [Want] {
-        return wants_new.compactMap { item in
+        print("filteredWants!")
+        return wants.compactMap { item in
             return item.isWant == isWant ? item : nil
         }
     }
     
     // catIndex == indexのものをフィルタ
     func filteredKeywords(_ isWant: Bool) -> [Keyword] {
-        return keywords_new.compactMap { item in
+        return keywords.compactMap { item in
             return item.isWant == isWant ? item : nil
         }
     }
 
 //    @ObservedObject var keywords = Keywords()
     
-    func addKeyword(isWant: Bool) {
-            let item = Keyword(title: "新キーワード", isWant: isWant)
+    
+    // Want
+    private func addWant(isWant: Bool) {
+        let item = Want(title: isWant ? "" : "", isWant: isWant, index: filteredWants(isWant).count)
+        wantAry.append(item)
+        modelContext.insert(item)
+        
+        
+        editingWant = item
+        textWant = ""// isWant ? "やりたいこと" : "やりたくないこと"//editingWant.title
+        isAlertPresented_Want = true
+        
+
+    }
+    
+    
+    private func deleteWant(_ want: Want) {
+//        withAnimation {
+        
+        if let index = wantAry.firstIndex(of: want) {
+            wantAry.remove(at: index)
+        }
+        
+        modelContext.delete(want)
+
+        
+        let delay = 1.0 //遅延
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            //
+            updateWantsIndex()
+            try! modelContext.save()
+            
+            
+            
+        }
+        
+      
+//        }
+    }
+    
+    // Keyword
+    private func addKeyword(isWant: Bool) {
+        let item = Keyword(title: "キーワード", isWant: isWant, index: filteredKeywords(isWant).count)
             modelContext.insert(item)
     }
     
    
-    private func deleteItem(_ item: Keyword) {
-        withAnimation {
-            modelContext.delete(item)
-            try! modelContext.save()
+    private func deleteKeyword(_ item: Keyword) {
+//        withAnimation {
+        modelContext.delete(item)
+        try! modelContext.save()
+    
+        updateKeywordsIndex()
+        
+
             
             
 //            for index in offsets {
 //                modelContext.delete(keywords_new[index])
 //                try! modelContext.save()
 //            }
-        }
+            
+//        }
     }
     
     let grids = [
         GridItem(.adaptive(minimum: 35, maximum: .infinity), spacing: 5)
     ]
     
+    @State private var isAlertPresented_Want = false
+    @State private var isAlertPresented_Keyword = false
+    @State private var textWant = ""
+    @State private var textKeyword = ""
+    @State private var editingWant : Want! = nil
+    @State private var editingKeyword : Keyword! = nil
+    
+
+    
+//    func updateWantsIndex() {
+//        for i in 0..<sortedWants.count {
+//            sortedWants[i].index = i
+//        }
+//        try! modelContext.save()
+//    }
+//    
+    
+    func updateWantsIndex() {
+        for i in 0..<wantAry.count {
+            wantAry[i].index = i
+            wantAry[i].index = i
+        }
+        try! modelContext.save()
+    }
+    
+    func updateKeywordsIndex() {
+        for i in 0..<keywords.count {
+            keywords[i].index = i
+        }
+        try! modelContext.save()
+    }
+    
+    
+    var sortedWants: [Want] {
+        get {
+            wantAry.sorted(by: { $0.index < $1.index })
+        }
+        set {
+            wantAry = newValue
+        }
+    }
+    
+    func move(offset: IndexSet, index: Int) {
+//        var ary = wantAry
+        wantAry.move(fromOffsets: offset, toOffset: index)
+        
+  
+        let delay = 1.0 //遅延
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+//            withAnimation {
+//                updateArrayIndex(ary)
+//                wants = ary
+            updateArrayIndex(wantAry)
+//                try! modelContext.save()
+                
+//            }
+        }
+        
+        
+        
+//        try! modelContext.save()
+    }
+    
+    func updateArrayIndex(_ ary: [Want]) {
+        for i in 0..<ary.count {
+//            let a = ary[i]
+            ary[i].index = i
+//            if a.isWant {
+//                print(a.title)
+//            }
+     
+        }
+    }
+    
+        
     var body: some View {
+        
         VStack() {
             GroupBox {
                 Text(title)
@@ -286,7 +420,6 @@ struct HalfView : View {
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 
-                
                 Image(systemName: imageName)
                     .resizable()
                     .scaledToFit()
@@ -296,21 +429,79 @@ struct HalfView : View {
                 List {
                     Section {
                         
-//                        ForEach(isWant ? wants.data_OK : wants.data_NG) { item in
-//                            WantRow(item, isWant: isWant)
-//                        }
-//                        
-                        ForEach(filteredWants(isWant)) { item in
-//                            Rect(title: item.title, isWant: isWant)
+                        //                        ForEach(isWant ? wants.data_OK : wants.data_NG) { item in
+                        //                            WantRow(item, isWant: isWant)
+                        //                        }
+                        //
+//                        ForEach(filteredWants(isWant)) { item in
+                        ForEach(wantAry) { item in
+                            //                            Rect(title: item.title, isWant: isWant)
                             WantRow(item, isWant: isWant)
+                                .swipeActions(edge: .trailing) {
+                                    Button(role: .destructive) {
+                                        deleteWant(item)
+                                    } label: {
+                                        Label("削除", systemImage: "trash")
+                                    }
+                                }
+                                .padding(.vertical, 4)
+                                .onTapGesture {
+                                    editingWant = item
+                                    textWant = editingWant.title
+                                    isAlertPresented_Want = true
+                                }
+                                .alert("編集", isPresented: $isAlertPresented_Want) {
+                                    TextField(isWant ? "やりたいこと": "やりたくないこと", text: $textWant)
+                                    
+                                    Button("削除", role: .destructive) {
+                                        isAlertPresented_Want = false
+                                        withAnimation {
+                                            deleteWant(editingWant)
+                            
+                                        }
+                                    }
+                                    Button("キャンセル") {
+                                        isAlertPresented_Want = false
+                                        
+//                                        withAnimation {
+//                                            wantAry.removeLast()
+//                                            modelContext.delete(editingWant)
+//                                        }
+                                 
+                                    }
+                                    Button("保存", role: .cancel) {
+                                        withAnimation {
+                                            editingWant.title = textWant
+                                        }
+                                    }
+                                    
+                                } message: {
+                                    // アラートのメッセージ...
+                                    //                                        Text("必要な情報を入力してください")
+                                }
                         }
+                        .onMove(perform: move)
+                        
                         
                         HStack {
                             
                             Spacer()
                             
                             Button {
-                                //                            showSheet = true
+                                withAnimation {
+                                    addWant(isWant: isWant)
+                                }
+                                //                                addKeyword(isWant: isWant)
+                                //                                print("isWant")
+                                //                                print(isWant)
+                                //                                if isWant {
+                                //                                    isAlertPresented_OK = true
+                                //                                } else {
+                                //                                    isAlertPresented_NG = true
+                                //                                }
+                                
+                                
+                                
                             } label: {
                                 Image(systemName: "plus")
                                     .resizable()
@@ -318,6 +509,47 @@ struct HalfView : View {
                                     .frame(height: 20)
                                     .foregroundColor(colorForWant(isWant))
                             }
+                            
+                            
+                            
+                            //                            .alert("LogIn", isPresented: $isAlertPresented_OK) {
+                            //
+                            //                                TextField("メールアドレス", text: $text)
+                            ////                                SecureField("パスワード", text: $password)
+                            //
+                            //                                Button("キャンセル") {}
+                            //                                Button("OK") {}
+                            //
+                            //                            } message: {
+                            //                                // アラートのメッセージ...
+                            //                                Text("必要な情報を入力してください")
+                            //                            }
+                            
+                            
+                            //                            .alert("やりたいこと追加", isPresented: isWant ? $isAlertPresented_OK : $isAlertPresented_NG, actions: {
+                            //                                     TextField("やりたいこと", text: $text)
+                            ////                                     SecureField("Password", text: $password)
+                            //                                     Button("保存", action: {
+                            ////                                         addWant(str: text)
+                            //                                     })
+                            //                                     Button("Cancel", role: .cancel, action: {})
+                            //                                 }, message: {
+                            //                                     Text("Please enter your username and password.")
+                            //                                 })
+                            
+                            //                            .alert("アラート", isPresented: $isAlertPresented) {
+                            //                                       TextField("テキストフィールド", text: $text)
+                            //
+                            //                                       Button {
+                            //                                           print("OK")
+                            //                                           addWant(str: text)
+                            //
+                            //
+                            //
+                            //                                       } label: {
+                            //                                           Text("OK")
+                            //                                       }
+                            //                                   }
                             
                             Spacer()
                         }
@@ -340,7 +572,6 @@ struct HalfView : View {
                 Text("キーワード")
                     .font(Font.system(size: 14).bold())
                     .foregroundStyle(colorForWant(isWant))
-//                    .padding(0)
                     .offset(y: 7)
                 
                 HStack(alignment: .center) {
@@ -350,10 +581,32 @@ struct HalfView : View {
                             ForEach(filteredKeywords(isWant)) { item in
                                 Rect(title: item.title, isWant: isWant)
                                     .onTapGesture {
-                                        deleteItem(item)
+                                        editingKeyword = item
+                                        textKeyword = editingKeyword.title
+                                        
+                                        isAlertPresented_Keyword = true
                                     }
+                                
+                                    .alert("編集", isPresented: $isAlertPresented_Keyword) {
+                                        TextField("キーワード", text: $textKeyword)
+                                        
+                                        Button("削除", role: .destructive) {
+                                            deleteKeyword(editingKeyword)
+                                        }
+                                        Button("キャンセル") {}
+                                        Button("保存", role: .cancel) {
+                                            editingKeyword.title = textKeyword
+                                            
+                                        }
+                                        
+                                    } message: {
+                                        // アラートのメッセージ...
+                                        //                                        Text("必要な情報を入力してください")
+                                    }
+                                
+                                
                             }
-                            Button{
+                            Button {
                                 withAnimation {
                                     addKeyword(isWant: isWant)
                                 }
@@ -370,6 +623,10 @@ struct HalfView : View {
             }
             .groupBoxStyle(StandardGroupBoxStyle(isWant: isWant))
         }
+        .onAppear{
+            wantAry = filteredWants(isWant) //wants
+            print(wantAry)
+        }
     }
 }
 
@@ -383,12 +640,15 @@ class Keyword : Identifiable {
     var id = UUID()
     var title: String
     var isWant: Bool
+    var index : Int
     
-    init(id: UUID = UUID(), title: String, isWant: Bool) {
+    init(id: UUID = UUID(), title: String, isWant: Bool, index: Int) {
         self.id = id
         self.title = title
         self.isWant = isWant
+        self.index = index
     }
+
 }
 
 //class Keywords : ObservableObject {
@@ -428,7 +688,7 @@ struct Rect: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 5)
             .stroke(colorForWant(isWant), lineWidth: 2)
-            .frame(height: 39)
+            .frame(width: 35, height: 35)
             .overlay {
                 Text(title)
                     .font(.system(size: 14))

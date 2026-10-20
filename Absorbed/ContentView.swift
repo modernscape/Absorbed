@@ -24,6 +24,18 @@ import UIKit
 class ShareData : ObservableObject {
     @Published var selectedCatView : CategoryView! = nil
     @Published var selectedItemView : ItemView! = nil
+    
+    func resetSelection() {
+        if selectedCatView != nil {
+            selectedCatView.isSelected = false
+            selectedCatView = nil
+        }
+        if selectedItemView != nil {
+            selectedItemView.isSelected = false
+            selectedItemView = nil
+        }
+
+    }
 //    @Published var todayItems : [Item] = []
 //    @Published var itemsForCategory = ItemsForCategory()
     
@@ -57,7 +69,50 @@ enum KeyString: String {
     case icon_4
     case selectionTab
     case selectedPicker
+    case numOfTodayItems
+    case magnifyBy
+    case aligned
+    case autoAlignViews
+    case showFields
+    case stepScreenB
+    case dreamStr
+    case dreamLimitStr
+    case birthDayStr
+    case age
+    case nowAge
+    case imgData
+    case imgSizeIndex
+    case selectedViewPicker
+    case countUpdateDateStr
+    case tutorialShown
+    case dreamViewShown
+    
+    case camera_posX
+    case camera_posY
+    case camera_posZ
+    case camera_rotX
+    case camera_rotY
+    case camera_rotZ
+    case camera_rotW
+    // camera
+    case focalLength
+    case fieldOfView
+    
+    case taskViewHiddenDateStr
+    
+    
+    
+    
+//    case angle
+//    case axisX
+//    case axisY
+//    case axisZ
+//    case anchorZ
+//    case perspective
+    
 }
+
+
 
 
 //let iconName_2 = iconNames_2[Int.random(in: 0..<iconNames_2.count)]
@@ -73,47 +128,25 @@ let pickerItemCount = 3
 let colors : [Color] = [Color("color_2"), .green, .yellow, .blue, .mint, .cyan,
                         .purple, .brown, .orange, .indigo, .teal, .gray]
 
-//　ダミー
-//let item_00 = Item(title: "投資", pos: CGPoint(x: 232, y: 63), length: 90, catIndex: 0)
-let item_00 = Item(title: "投資", posX :232, posY: 63, length: 90, catIndex: 0, stepNumber: 1, hasPhase: true)
-let item_01 = Item(title: "起業", posX :139, posY: 89, length: 50, catIndex: 0)
-let item_02 = Item(title: "CW", posX :203, posY: 158, length: 65, catIndex: 0, stepNumber: 2)
+//　初期item
+//let item_00 = Item(title: "投資", posX :232, posY: 63, length: 90, stepNumber: 1, hasPhase: true)
+//let item_01 = Item(title: "起業", posX :139, posY: 89, length: 50)
+//let item_02 = Item(title: "CW", posX :203, posY: 158, length: 65, stepNumber: 2)
+//
+//
+//let item_10 = Item(title: "Shader", posX :232, posY: 63, length: 80, stepNumber: 1, hasPhase: true)
+//let item_11 = Item(title: "建築", posX :140, posY: 90, length: 50, stepNumber: 4)
+//let item_12 = Item(title: "アプリ", posX :200, posY: 160, length: 65)
+//
+//let item_20 = Item(title: "食事", posX :255, posY: 70, length: 80)
+//let item_21 = Item(title: "テニス", posX :202, posY: 157, length: 50, stepNumber: 3)
+//let item_22 = Item(title: "筋トレ", posX :122, posY: 95, length: 85, stepNumber: 1, hasPhase: true)
 
 
-
-
-//let item_01 = Item(title: "起業", pos: CGPoint(x: 139, y: 89), length: 50, catIndex: 0)
-//let item_02 = Item(title: "CW", pos: CGPoint(x: 203, y: 158), length: 65, catIndex: 0)
-
-let item_10 = Item(title: "Shader", posX :232, posY: 63, length: 80, catIndex: 1, stepNumber: 1, hasPhase: true)
-let item_11 = Item(title: "建築", posX :140, posY: 90, length: 50, catIndex: 1, stepNumber: 4)
-let item_12 = Item(title: "アプリ", posX :200, posY: 160, length: 65, catIndex: 1)
-
-
-//let item_10 = Item(title: "Shader", pos: CGPoint(x: 232, y: 63), length: 80, catIndex: 1)
-//let item_11 = Item(title: "建築", pos: CGPoint(x: 140, y: 90), length: 50, catIndex: 1)
-//let item_12 = Item(title: "アプリ", pos: CGPoint(x: 200, y: 160), length: 65, catIndex: 1)
-
-
-let item_20 = Item(title: "食事", posX :255, posY: 70, length: 80, catIndex: 2)
-let item_21 = Item(title: "テニス", posX :202, posY: 157, length: 50, catIndex: 2, stepNumber: 3)
-let item_22 = Item(title: "筋トレ", posX :122, posY: 95, length: 85, catIndex: 2, stepNumber: 1, hasPhase: true)
-
-
-
-
-//let item_20 = Item(title: "食事", pos: CGPoint(x: 255, y: 70), length: 80, catIndex: 2)
-//let item_21 = Item(title: "テニス", pos: CGPoint(x: 202, y: 157), length: 50, catIndex: 2)
-//let item_22 = Item(title: "筋トレ", pos: CGPoint(x: 122, y: 95), length: 85, catIndex: 2)
-
-
-//let cat0 = Category(title: "お金", length: 200, catIndex: 0, itemsData: [item_00, item_01, item_02])
-//let cat1 = Category(title: "ライフワーク", length: 200, catIndex: 1, itemsData: [item_10, item_11, item_12])
-//let cat2 = Category(title: "健康", length: 250, catIndex: 2, itemsData: [item_20, item_21, item_22])
-
-let cat0 = Category(title: "お金", posX: 100, posY: 100, length: 200, index: 0)
-let cat1 = Category(title: "ライフワーク", posX: 100, posY: 100, length: 200, index: 1)
-let cat2 = Category(title: "健康", posX: 100, posY: 100, length: 250, index: 2)
+// 初期category
+//let cat0 = Category(title: "お金", posX: 100, posY: 100, length: 200, index: 0, items: [item_00, item_01, item_02])
+//let cat1 = Category(title: "ライフワーク", posX: 100, posY: 100, length: 200, index: 1, items: [item_10, item_11, item_12])
+//let cat2 = Category(title: "健康", posX: 100, posY: 100, length: 250, index: 2, items: [item_20, item_21, item_22])
 
 
 struct ContentView: View {
@@ -121,6 +154,8 @@ struct ContentView: View {
 //    @Query private var cats: [Cat]
     
     @EnvironmentObject var setData : ShareData
+    
+    
     
     init() {
         UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(named: "color_1")
@@ -137,6 +172,9 @@ struct ContentView: View {
 
     @AppStorage(KeyString.selectionTab.rawValue) var selectionTab : Int = 0
     @AppStorage(KeyString.selectedPicker.rawValue) var selectedPicker : Int = 0
+    
+    
+    
     
     
 //    @State var selection = 0
@@ -162,28 +200,34 @@ struct ContentView: View {
 
     
     
-    func makeDefaultItems() {
-        
-        let ary = [
-//            item_00,
-            item_01,
-            item_02,
-//            item_10,
-            item_11,
-            item_12,
-            item_20,
-            item_21,
-//            item_22
-        ]
-        
-        for i in 0..<ary.count {
-            let item = ary[i]
-            modelContext.insert(item)
-        }
-    }
-    
+//    func makeDefaultItems() {
+//        
+//        let ary = [
+////            item_00,
+//            item_01,
+//            item_02,
+////            item_10,
+//            item_11,
+//            item_12,
+//            item_20,
+//            item_21,
+////            item_22
+//        ]
+//        
+//        for i in 0..<ary.count {
+//            let item = ary[i]
+//            modelContext.insert(item)
+//        }
+//    }
+//    
     @AppStorage(KeyString.icon_1.rawValue) var icon_1 : Int = 0
-    @AppStorage(KeyString.icon_2.rawValue) var icon_2 : Int = 0
+    @AppStorage(KeyString.icon_2.rawValue) var icon_2 : Int = 4
+    
+
+    @AppStorage(KeyString.tutorialShown.rawValue) var showTutorial = false
+    @AppStorage(KeyString.dreamViewShown.rawValue) var dreamViewShown = true
+    
+//    @State var showTutorial = true
     
     var body: some View {
         
@@ -192,46 +236,16 @@ struct ContentView: View {
             /* ----------------------------------------------------------------------------
              MARK: - 没入
              ------------------------------------------------------------------------------*/
-//            Image("immersion")
-//                .resizable()
-//                .scaledToFit()
-//                .tabItem {
-//                    
-//                    Label("没入", systemImage: iconName_1)
-//        
-//                    
-//                }
-//                .tag(0)
-//            VStack {
-//                Text(isConnect ? "Connect" : "No Connect")
-//                
-//                Button {
-//                    isConnect = viewModel.session.isReachable
-//                } label: {
-//                    Text("Check")
-//                }
-//                Text("\(viewModel.langs.count)")
-//                List(viewModel.langs.indices, id:\.self) { index in
-//                    Text(viewModel.langs[index])
-//                }
-//            }.padding()
-//            
-            
-//            List(langs.indices, id:\.self) { index in
-//                Button {
-//                    viewModel.send(lang: langs[index])
-//                } label: {
-//                    Text(langs[index])
-//                }
-//            }
-//            
-//            
-//            
+
+
+//            VolumeView()
             
             
+            SceneScreen()
+  
             
             
-            ImmersionScreen()
+//            ImmersionScreen()
             
                 .tabItem {
                     Label("没入", systemImage: iconNames_1[icon_1])
@@ -265,7 +279,6 @@ struct ContentView: View {
                         
                         Text(pickerNames[2])
                             .tag(2)
-                        
                     }
                     .pickerStyle(.segmented)
                     .padding([.bottom, .horizontal])
@@ -283,20 +296,70 @@ struct ContentView: View {
             
         }
         .onAppear {
-      
-            if _ud.object(forKey: KeyString.itemsMaken.rawValue) == nil {
-                makeDefaultItems()
-                _ud.setValue("Done", forKey: KeyString.itemsMaken.rawValue)
-            }
-       
-        
-//            makeDefaultCategories()
-       
+//            _ud.removeObject(forKey: KeyString.tutorialShown.rawValue)
+//            _ud.removeObject(forKey: KeyString.dreamViewShown.rawValue)
         }
+        .sheet(isPresented: Binding(get: {
+            dreamViewShown
+        }, set: { (newVal) in
+            dreamViewShown = newVal
+        }), onDismiss: {
+            showTutorial = true
+        }) {
+            DreamView()
+        }
+        .alert("アプリの使い方を見る",isPresented: Binding(get: {
+            showTutorial
+//            dreamViewShown
+        }, set: { (newVal) in
+         
+
+        }))
+        {
+
+//            DreamIView()
+            
+            Button("見る", role: .cancel, action: {
+                if let url = URL(string: "http://cf549269.cloudfree.jp/app_manuals/Dreamer.pdf") {
+                    UIApplication.shared.open(url)
+                    
+                }
+                showTutorial = false
+            })
+            
+            Button("今は見ない", role: .none, action: {
+                showTutorial = false
+
+            })
+            
+        } message: {
+                Text("設定画面からいつでも見られます\n\n（俯瞰タブ＞ビジョン＞左上「設定」ボタン＞チュートリアル）")
+        }
+
+        
     }
 
 }
 
+//struct MagnificationGestureView: View {
+//    
+//    @GestureState var magnifyBy = 1.0
+//    
+//    var magnification: some Gesture {
+//        MagnificationGesture()
+//            .updating($magnifyBy) { currentState, gestureState, transaction in
+//                gestureState = currentState
+//            }
+//    }
+//    
+//    var body: some View {
+//        Circle()
+//            .frame(width: 100, height: 100)
+//            .scaleEffect(magnifyBy)
+//            .gesture(magnification)
+//    }
+//}
+//
 
 
 #Preview {

@@ -266,6 +266,8 @@ struct ItemRectView: View {
             ZStack {
                 Rectangle()
                     .fill(colors[catIndex])
+                    .padding(3)
+                
 //                    .frame(width: lengthes[count-1], height: lengthes[count-1])
 //                    .frame(width: screenWidth*0.3, height: screenWidth*0.3)
                     .overlay {
