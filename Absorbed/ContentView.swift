@@ -1,24 +1,318 @@
 //
 //  ContentView.swift
-//  Absorbed
+//  Immersion
 //
-//  Created by forest on 2024/02/15.
+//  Created by forest on 2024/01/15.
 //
 
 import SwiftUI
+import SwiftData
+
+let _ud = UserDefaults.standard
+//@ObservedObject var categories = Categorys()
+
+
+/* ----------------------------------------------------------------------------
+ MARK: - Watcht連携
+ ------------------------------------------------------------------------------*/
+
+import UIKit
+//import WatchConnectivity
+
+
+
+class ShareData : ObservableObject {
+    @Published var selectedCatView : CategoryView! = nil
+    @Published var selectedItemView : ItemView! = nil
+//    @Published var todayItems : [Item] = []
+//    @Published var itemsForCategory = ItemsForCategory()
+    
+  
+
+}
+
+//var selectedCatView : CategoryView!
+//var setData.setData.selectedCatView : ItemView!
+
+
+enum KeyString: String {
+    case category_pos
+    case category_length
+    case wantsMaken
+    case kewordsMaken
+    case stepsMaken
+    case dislikesMaken
+    case categoriesMaken
+    case itemsMaken
+    case inputText_hindrance
+    case inputText_lisk
+    case startDay
+    case phasesMaken
+    case moveLocked
+    case moveLocked_item
+    case todayItems
+    case icon_1
+    case icon_2
+    case icon_3
+    case icon_4
+    case selectionTab
+    case selectedPicker
+}
+
+
+//let iconName_2 = iconNames_2[Int.random(in: 0..<iconNames_2.count)]
+
+//let iconName_2 = "network"
+
+
+//let pickerName_1 = "Board"
+//let pickerName_2 = "Steps"
+
+let pickerItemCount = 3
+
+let colors : [Color] = [Color("color_2"), .green, .yellow, .blue, .mint, .cyan,
+                        .purple, .brown, .orange, .indigo, .teal, .gray]
+
+//　ダミー
+//let item_00 = Item(title: "投資", pos: CGPoint(x: 232, y: 63), length: 90, catIndex: 0)
+let item_00 = Item(title: "投資", posX :232, posY: 63, length: 90, catIndex: 0, stepNumber: 1, hasPhase: true)
+let item_01 = Item(title: "起業", posX :139, posY: 89, length: 50, catIndex: 0)
+let item_02 = Item(title: "CW", posX :203, posY: 158, length: 65, catIndex: 0, stepNumber: 2)
+
+
+
+
+//let item_01 = Item(title: "起業", pos: CGPoint(x: 139, y: 89), length: 50, catIndex: 0)
+//let item_02 = Item(title: "CW", pos: CGPoint(x: 203, y: 158), length: 65, catIndex: 0)
+
+let item_10 = Item(title: "Shader", posX :232, posY: 63, length: 80, catIndex: 1, stepNumber: 1, hasPhase: true)
+let item_11 = Item(title: "建築", posX :140, posY: 90, length: 50, catIndex: 1, stepNumber: 4)
+let item_12 = Item(title: "アプリ", posX :200, posY: 160, length: 65, catIndex: 1)
+
+
+//let item_10 = Item(title: "Shader", pos: CGPoint(x: 232, y: 63), length: 80, catIndex: 1)
+//let item_11 = Item(title: "建築", pos: CGPoint(x: 140, y: 90), length: 50, catIndex: 1)
+//let item_12 = Item(title: "アプリ", pos: CGPoint(x: 200, y: 160), length: 65, catIndex: 1)
+
+
+let item_20 = Item(title: "食事", posX :255, posY: 70, length: 80, catIndex: 2)
+let item_21 = Item(title: "テニス", posX :202, posY: 157, length: 50, catIndex: 2, stepNumber: 3)
+let item_22 = Item(title: "筋トレ", posX :122, posY: 95, length: 85, catIndex: 2, stepNumber: 1, hasPhase: true)
+
+
+
+
+//let item_20 = Item(title: "食事", pos: CGPoint(x: 255, y: 70), length: 80, catIndex: 2)
+//let item_21 = Item(title: "テニス", pos: CGPoint(x: 202, y: 157), length: 50, catIndex: 2)
+//let item_22 = Item(title: "筋トレ", pos: CGPoint(x: 122, y: 95), length: 85, catIndex: 2)
+
+
+//let cat0 = Category(title: "お金", length: 200, catIndex: 0, itemsData: [item_00, item_01, item_02])
+//let cat1 = Category(title: "ライフワーク", length: 200, catIndex: 1, itemsData: [item_10, item_11, item_12])
+//let cat2 = Category(title: "健康", length: 250, catIndex: 2, itemsData: [item_20, item_21, item_22])
+
+let cat0 = Category(title: "お金", posX: 100, posY: 100, length: 200, index: 0)
+let cat1 = Category(title: "ライフワーク", posX: 100, posY: 100, length: 200, index: 1)
+let cat2 = Category(title: "健康", posX: 100, posY: 100, length: 250, index: 2)
+
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+    @Environment(\.modelContext) private var modelContext
+//    @Query private var cats: [Cat]
+    
+    @EnvironmentObject var setData : ShareData
+    
+    init() {
+        UIPageControl.appearance().currentPageIndicatorTintColor = UIColor(named: "color_1")
+        UIPageControl.appearance().pageIndicatorTintColor = UIColor.black.withAlphaComponent(0.2)
     }
+    
+//    func makeDefaultCategoriesData() {
+//        categoryData.categories.append(cat0)
+//        categoryData.categories.append(cat1)
+//        categoryData.categories.append(cat2)
+//    }
+//    
+    
+
+    @AppStorage(KeyString.selectionTab.rawValue) var selectionTab : Int = 0
+    @AppStorage(KeyString.selectedPicker.rawValue) var selectedPicker : Int = 0
+    
+    
+//    @State var selection = 0
+//    @State var selectedPicker = 1
+
+    
+    @State var showMenu = false
+    @State var showMenu_forItem = false
+    
+    // 定数
+    let animDur = 0.0
+        
+    @State var opacity_wantA : Double = 0
+    @State var opacity_wantB : Double = 0
+    
+    
+//    private let viewModel = WatchConnectViewModel()
+//    @ObservedObject var viewModel = WatchConnectViewModel()
+    
+//    private let langs = ["Swift", "Kotlin", "Objective-C", "Java", "Dart"]
+
+    
+
+    
+    
+    func makeDefaultItems() {
+        
+        let ary = [
+//            item_00,
+            item_01,
+            item_02,
+//            item_10,
+            item_11,
+            item_12,
+            item_20,
+            item_21,
+//            item_22
+        ]
+        
+        for i in 0..<ary.count {
+            let item = ary[i]
+            modelContext.insert(item)
+        }
+    }
+    
+    @AppStorage(KeyString.icon_1.rawValue) var icon_1 : Int = 0
+    @AppStorage(KeyString.icon_2.rawValue) var icon_2 : Int = 0
+    
+    var body: some View {
+        
+        TabView(selection: $selectionTab) {
+            
+            /* ----------------------------------------------------------------------------
+             MARK: - 没入
+             ------------------------------------------------------------------------------*/
+//            Image("immersion")
+//                .resizable()
+//                .scaledToFit()
+//                .tabItem {
+//                    
+//                    Label("没入", systemImage: iconName_1)
+//        
+//                    
+//                }
+//                .tag(0)
+//            VStack {
+//                Text(isConnect ? "Connect" : "No Connect")
+//                
+//                Button {
+//                    isConnect = viewModel.session.isReachable
+//                } label: {
+//                    Text("Check")
+//                }
+//                Text("\(viewModel.langs.count)")
+//                List(viewModel.langs.indices, id:\.self) { index in
+//                    Text(viewModel.langs[index])
+//                }
+//            }.padding()
+//            
+            
+//            List(langs.indices, id:\.self) { index in
+//                Button {
+//                    viewModel.send(lang: langs[index])
+//                } label: {
+//                    Text(langs[index])
+//                }
+//            }
+//            
+//            
+//            
+            
+            
+            
+            
+            ImmersionScreen()
+            
+                .tabItem {
+                    Label("没入", systemImage: iconNames_1[icon_1])
+                }
+                .tag(0)
+            
+            
+            /* ----------------------------------------------------------------------------
+             MARK: - 俯瞰
+             ------------------------------------------------------------------------------*/
+            VStack {
+                
+                switch selectedPicker {
+                case 0:
+                    IntentionScreen()
+                case 1:
+                    BoardScreen()
+                case 2:
+                    StepsScreen(forAddItem: false)
+                default:
+                    Text("")
+                }
+                
+                HStack {
+                    Picker("want", selection: $selectedPicker) {
+                        Text(pickerNames[0])
+                            .tag(0)
+
+                        Text(pickerNames[1])
+                            .tag(1)
+                        
+                        Text(pickerNames[2])
+                            .tag(2)
+                        
+                    }
+                    .pickerStyle(.segmented)
+                    .padding([.bottom, .horizontal])
+                    
+                }
+                
+            }
+            .animation(.easeIn, value: selectedPicker)
+            .tabItem {
+//                Label("俯瞰", systemImage: "rectangle.3.group")
+//                Label("俯瞰", systemImage: "eye")
+                Label("俯瞰", systemImage: iconNames_2[icon_2])
+            }
+            .tag(1)
+            
+        }
+        .onAppear {
+      
+            if _ud.object(forKey: KeyString.itemsMaken.rawValue) == nil {
+                makeDefaultItems()
+                _ud.setValue("Done", forKey: KeyString.itemsMaken.rawValue)
+            }
+       
+        
+//            makeDefaultCategories()
+       
+        }
+    }
+
 }
+
+
 
 #Preview {
     ContentView()
 }
+
+
+
+
+
+
+//struct PhaseView: View {
+//    
+//    var body: some View {
+//        Text(itemPickerName_2)
+//    }
+//    
+//}
+//

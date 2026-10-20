@@ -1,17 +1,18 @@
 //
-//  AbsorbedApp.swift
-//  Absorbed Watch App
+//  ImmersionApp.swift
+//  Immersion Watch App
 //
-//  Created by forest on 2024/02/15.
+//  Created by forest on 2024/01/15.
 //
 
 import SwiftUI
 
 @main
-struct Absorbed_Watch_AppApp: App {
+struct Immersion_Watch_AppApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
     }
 }
+
